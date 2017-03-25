@@ -1,0 +1,127 @@
+#include <CFileMgrIcons.h>
+#include <CFileMgr.h>
+#include <CFileMgrDir.h>
+#include <CFileMgrFile.h>
+
+#include <CFileUtil.h>
+#include <CImageLib.h>
+#include <CPixelRenderer.h>
+#include <CEvent.h>
+
+CFileMgrIcons::
+CFileMgrIcons(CFileMgr *file_mgr) :
+ file_mgr_(file_mgr), renderer_(0), size_(0,0)
+{
+  CImage::setResizeType(CIMAGE_RESIZE_BILINEAR);
+}
+
+CFileMgrIcons::
+~CFileMgrIcons()
+{
+}
+
+void
+CFileMgrIcons::
+setRenderer(CPixelRenderer *renderer)
+{
+  renderer_ = renderer;
+
+  CFontPtr font = CFontMgrInst->lookupFont("helvetica", CFONT_STYLE_NORMAL, 8);
+
+  if (renderer_ != 0)
+    renderer_->setFont(font);
+}
+
+void
+CFileMgrIcons::
+redraw()
+{
+  file_mgr_->redraw();
+}
+
+void
+CFileMgrIcons::
+draw()
+{
+  if (renderer_ == 0)
+    return;
+
+  //-----
+
+  CFileMgrDir::FileList file_list;
+
+  file_mgr_->getFileList(file_list);
+
+  //-----
+
+  // Draw Icons
+
+  int x = 0, y = 0;
+
+  CFileMgrDir::file_iterator p1 = file_list.begin();
+  CFileMgrDir::file_iterator p2 = file_list.end  ();
+
+  for ( ; p1 != p2; ++p1)
+    stepPosition(&x, &y);
+
+  if (x > 0)
+    y += file_mgr_->getIconHeight();
+
+  size_.height = y;
+
+  //-----
+
+  renderer_->clear();
+
+  //-----
+
+  CIPoint2D p(0, 0);
+
+  renderer_->applyOffset(p);
+
+  p1 = file_list.begin();
+
+  for ( ; p1 != p2; ++p1) {
+    if ((*p1)->isDirectory())
+      file_mgr_->drawDir(renderer_, p.x, p.y, *p1);
+    else
+      file_mgr_->drawFile(renderer_, p.x, p.y, *p1);
+
+    stepPosition(&p.x, &p.y);
+  }
+}
+
+void
+CFileMgrIcons::
+stepPosition(int *x, int *y)
+{
+  if (renderer_ == 0)
+    return;
+
+  *x += file_mgr_->getIconWidth();
+
+  if (*x + file_mgr_->getIconWidth() >= (int) renderer_->getWidth()) {
+    *x  = 0;
+    *y += file_mgr_->getIconHeight();
+  }
+}
+
+void
+CFileMgrIcons::
+keyPress(const CKeyEvent &event)
+{
+  const std::string &str = event.getText();
+
+  if      (str == "n")
+    file_mgr_->selectNext();
+  else if (str == "p")
+    file_mgr_->selectPrev();
+
+  redraw();
+}
+
+void
+CFileMgrIcons::
+keyRelease(const CKeyEvent &)
+{
+}
