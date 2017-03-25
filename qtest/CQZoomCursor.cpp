@@ -2,12 +2,7 @@
 
 CQZoomCursor::
 CQZoomCursor(CImagePtr image) :
- image_           (image),
- size_            (0,0),
- shape_           (CIRCLE),
- pos_valid_       (false),
- factor_          (1),
- cursor_map_valid_(false)
+ image_(image)
 {
   setSize(CISize2D(48, 48));
 }

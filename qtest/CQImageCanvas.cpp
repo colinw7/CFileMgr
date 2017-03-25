@@ -12,13 +12,7 @@
 
 CQImageCanvas::
 CQImageCanvas(QWidget *parent) :
- QWidget            (parent),
- mode_              (MODE_NONE),
- zoom_factor_       (1.0),
- pressed_           (false),
- fill_screen_       (false),
- keep_aspect_       (true),
- zoom_cursor_active_(false)
+ QWidget(parent)
 {
   setObjectName("imageCanvas");
 
@@ -81,15 +75,6 @@ CQImageCanvas::
 setPenForeground(const CRGBA &rgba)
 {
   pen_.fg = rgba;
-}
-
-void
-CQImageCanvas::
-setZoomFactor(double factor)
-{
-  zoom_factor_.setValue(factor);
-
-  updateVImage(false);
 }
 
 void
@@ -164,8 +149,8 @@ paintEvent(QPaintEvent *)
     }
   }
 
-  if (zoom_cursor_active_) {
-    CIPoint2D pos = CQUtil::fromQPoint(QCursor::pos());
+  if (getZoomCursor()) {
+    CIPoint2D pos = CQUtil::fromQPoint(mapFromGlobal(QCursor::pos()));
 
     CImagePtr image = zoom_cursor_->getImage(pos);
 
@@ -390,10 +375,54 @@ setZoomCursor(bool zoom_cursor_active)
 {
   zoom_cursor_active_ = zoom_cursor_active;
 
-  if (zoom_cursor_active_)
+  if (zoom_cursor_active_) {
     setCursor(Qt::BlankCursor);
+
+    setMouseTracking(true);
+  }
   else
     setCursor(Qt::ArrowCursor);
+}
+
+void
+CQImageCanvas::
+setZoomFactor(double factor)
+{
+  zoom_factor_.setValue(factor);
+
+  updateVImage(false);
+}
+
+double
+CQImageCanvas::
+getZoomCursorFactor() const
+{
+  return zoom_cursor_->getFactor();
+}
+
+void
+CQImageCanvas::
+setZoomCursorFactor(double f)
+{
+  zoom_cursor_->setFactor(f);
+
+  update();
+}
+
+int
+CQImageCanvas::
+getZoomCursorWidth() const
+{
+  return zoom_cursor_->getWidth();
+}
+
+void
+CQImageCanvas::
+setZoomCursorWidth(int w)
+{
+  zoom_cursor_->setWidth(w);
+
+  update();
 }
 
 void
@@ -442,17 +471,17 @@ mousePressEvent(QMouseEvent *event)
 {
   press_pos_ = CQUtil::fromQPoint(event->pos());
 
-  if      (mode_ == MODE_SELECT) {
+  if      (mode_ == Mode::SELECT) {
     if (event->button() != Qt::LeftButton) return;
   }
-  else if (mode_ == MODE_PEN) {
+  else if (mode_ == Mode::PEN) {
     if (event->button() != Qt::LeftButton) return;
 
     vimage_->setRGBAPixel(press_pos_, pen_.fg);
 
     update();
   }
-  else if (mode_ == MODE_DROPPER) {
+  else if (mode_ == Mode::DROPPER) {
     if (event->button() != Qt::LeftButton && event->button() != Qt::MidButton) return;
 
     if (vimage_->validPixel(press_pos_)) {
@@ -477,10 +506,10 @@ CQImageCanvas::
 mouseMoveEvent(QMouseEvent *)
 {
   if (pressed_) {
-    if      (mode_ == MODE_SELECT) {
+    if      (mode_ == Mode::SELECT) {
       //pointerMotion(event);
     }
-    else if (mode_ == MODE_PEN) {
+    else if (mode_ == Mode::PEN) {
       //vrenderer_->setForeground(pen_.fg);
 
       //vrenderer_->drawLine(press_pos_, event->getPosition());
@@ -497,6 +526,9 @@ mouseMoveEvent(QMouseEvent *)
 
     //update();
   }
+
+  if (getZoomCursor())
+    update();
 }
 
 void
@@ -505,7 +537,7 @@ mouseReleaseEvent(QMouseEvent *event)
 {
   if (! pressed_) return;
 
-  if      (mode_ == MODE_SELECT) {
+  if      (mode_ == Mode::SELECT) {
     if (event->button() != Qt::LeftButton) return;
   }
 }
