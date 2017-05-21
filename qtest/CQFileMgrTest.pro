@@ -17,7 +17,6 @@ CQFileMgrTest.cpp \
 \
 CQImageCanvas.cpp \
 CQPaintTools.cpp \
-CQWinWidget.cpp \
 CQZoomCursor.cpp \
 
 HEADERS += \
@@ -25,7 +24,6 @@ CQFileMgrTest.h \
 \
 CQImageCanvas.h \
 CQPaintTools.h \
-CQWinWidget.h \
 CQZoomCursor.h \
 CValueHistory.h \
 

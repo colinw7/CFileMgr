@@ -52,22 +52,18 @@ SOURCES       = main.cpp \
 		CQFileMgrTest.cpp \
 		CQImageCanvas.cpp \
 		CQPaintTools.cpp \
-		CQWinWidget.cpp \
 		CQZoomCursor.cpp .moc/moc_CQFileMgrTest.cpp \
 		.moc/moc_CQImageCanvas.cpp \
 		.moc/moc_CQPaintTools.cpp \
-		.moc/moc_CQWinWidget.cpp \
 		.moc/moc_CQZoomCursor.cpp
 OBJECTS       = ../obj/main.o \
 		../obj/CQFileMgrTest.o \
 		../obj/CQImageCanvas.o \
 		../obj/CQPaintTools.o \
-		../obj/CQWinWidget.o \
 		../obj/CQZoomCursor.o \
 		../obj/moc_CQFileMgrTest.o \
 		../obj/moc_CQImageCanvas.o \
 		../obj/moc_CQPaintTools.o \
-		../obj/moc_CQWinWidget.o \
 		../obj/moc_CQZoomCursor.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/unix.conf \
@@ -110,6 +106,7 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_webkitwidgets.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_widgets.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_widgets_private.pri \
+		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_x11extras.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_xcb_qpa_lib_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_xml.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_xml_private.pri \
@@ -135,13 +132,11 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		CQFileMgrTest.pro CQFileMgrTest.h \
 		CQImageCanvas.h \
 		CQPaintTools.h \
-		CQWinWidget.h \
 		CQZoomCursor.h \
 		CValueHistory.h main.cpp \
 		CQFileMgrTest.cpp \
 		CQImageCanvas.cpp \
 		CQPaintTools.cpp \
-		CQWinWidget.cpp \
 		CQZoomCursor.cpp
 QMAKE_TARGET  = CQFileMgrTest
 DESTDIR       = ../bin/#avoid trailing-slash linebreak
@@ -215,6 +210,7 @@ Makefile: CQFileMgrTest.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64/q
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_webkitwidgets.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_widgets.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_widgets_private.pri \
+		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_x11extras.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_xcb_qpa_lib_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_xml.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_xml_private.pri \
@@ -284,6 +280,7 @@ Makefile: CQFileMgrTest.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64/q
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_webkitwidgets.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_widgets.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_widgets_private.pri:
+/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_x11extras.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_xcb_qpa_lib_private.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_xml.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_xml_private.pri:
@@ -325,8 +322,8 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
-	$(COPY_FILE) --parents CQFileMgrTest.h CQImageCanvas.h CQPaintTools.h CQWinWidget.h CQZoomCursor.h CValueHistory.h $(DISTDIR)/
-	$(COPY_FILE) --parents main.cpp CQFileMgrTest.cpp CQImageCanvas.cpp CQPaintTools.cpp CQWinWidget.cpp CQZoomCursor.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents CQFileMgrTest.h CQImageCanvas.h CQPaintTools.h CQZoomCursor.h CValueHistory.h $(DISTDIR)/
+	$(COPY_FILE) --parents main.cpp CQFileMgrTest.cpp CQImageCanvas.cpp CQPaintTools.cpp CQZoomCursor.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -349,9 +346,9 @@ check: first
 
 compiler_rcc_make_all:
 compiler_rcc_clean:
-compiler_moc_header_make_all: .moc/moc_CQFileMgrTest.cpp .moc/moc_CQImageCanvas.cpp .moc/moc_CQPaintTools.cpp .moc/moc_CQWinWidget.cpp .moc/moc_CQZoomCursor.cpp
+compiler_moc_header_make_all: .moc/moc_CQFileMgrTest.cpp .moc/moc_CQImageCanvas.cpp .moc/moc_CQPaintTools.cpp .moc/moc_CQZoomCursor.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) .moc/moc_CQFileMgrTest.cpp .moc/moc_CQImageCanvas.cpp .moc/moc_CQPaintTools.cpp .moc/moc_CQWinWidget.cpp .moc/moc_CQZoomCursor.cpp
+	-$(DEL_FILE) .moc/moc_CQFileMgrTest.cpp .moc/moc_CQImageCanvas.cpp .moc/moc_CQPaintTools.cpp .moc/moc_CQZoomCursor.cpp
 .moc/moc_CQFileMgrTest.cpp: ../../CQUtil/include/CQMainWindow.h \
 		../../CUtil/include/CAutoPtr.h \
 		CQFileMgrTest.h
@@ -386,12 +383,9 @@ compiler_moc_header_clean:
 		CQImageCanvas.h
 	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64 -I/home/colinw/git/CFileMgr/qtest -I/home/colinw/git/CFileMgr/qtest -I/home/colinw/git/CFileMgr/qinclude -I/home/colinw/git/CFileMgr/include -I/home/colinw/git/CQUtil/include -I/home/colinw/git/CImageLib/include -I/home/colinw/git/CFont/include -I/home/colinw/git/CFile/include -I/home/colinw/git/CFileUtil/include -I/home/colinw/git/CMath/include -I/home/colinw/git/CStrUtil/include -I/home/colinw/git/CUtil/include -I/home/colinw/git/COS/include -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtOpenGL -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include CQImageCanvas.h -o .moc/moc_CQImageCanvas.cpp
 
-.moc/moc_CQPaintTools.cpp: CQWinWidget.h \
+.moc/moc_CQPaintTools.cpp: ../../CQUtil/include/CQWinWidget.h \
 		CQPaintTools.h
 	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64 -I/home/colinw/git/CFileMgr/qtest -I/home/colinw/git/CFileMgr/qtest -I/home/colinw/git/CFileMgr/qinclude -I/home/colinw/git/CFileMgr/include -I/home/colinw/git/CQUtil/include -I/home/colinw/git/CImageLib/include -I/home/colinw/git/CFont/include -I/home/colinw/git/CFile/include -I/home/colinw/git/CFileUtil/include -I/home/colinw/git/CMath/include -I/home/colinw/git/CStrUtil/include -I/home/colinw/git/CUtil/include -I/home/colinw/git/COS/include -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtOpenGL -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include CQPaintTools.h -o .moc/moc_CQPaintTools.cpp
-
-.moc/moc_CQWinWidget.cpp: CQWinWidget.h
-	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64 -I/home/colinw/git/CFileMgr/qtest -I/home/colinw/git/CFileMgr/qtest -I/home/colinw/git/CFileMgr/qinclude -I/home/colinw/git/CFileMgr/include -I/home/colinw/git/CQUtil/include -I/home/colinw/git/CImageLib/include -I/home/colinw/git/CFont/include -I/home/colinw/git/CFile/include -I/home/colinw/git/CFileUtil/include -I/home/colinw/git/CMath/include -I/home/colinw/git/CStrUtil/include -I/home/colinw/git/CUtil/include -I/home/colinw/git/COS/include -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtOpenGL -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include CQWinWidget.h -o .moc/moc_CQWinWidget.cpp
 
 .moc/moc_CQZoomCursor.cpp: ../../CImageLib/include/CImageLib.h \
 		../../CFile/include/CFile.h \
@@ -530,7 +524,7 @@ compiler_clean: compiler_moc_header_clean
 		../../CUtil/include/CEvent.h \
 		../../CUtil/include/CKeyType.h \
 		../../CUtil/include/CAutoPtr.h \
-		CQWinWidget.h \
+		../../CQUtil/include/CQWinWidget.h \
 		CQPaintTools.h \
 		CQZoomCursor.h \
 		../../CImageLib/include/CImageLib.h \
@@ -566,7 +560,7 @@ compiler_clean: compiler_moc_header_clean
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ../obj/CQImageCanvas.o CQImageCanvas.cpp
 
 ../obj/CQPaintTools.o: CQPaintTools.cpp CQPaintTools.h \
-		CQWinWidget.h \
+		../../CQUtil/include/CQWinWidget.h \
 		../../CQUtil/include/CQPixmapCache.h \
 		../../CQUtil/include/CQImageButton.h \
 		../../CImageLib/include/CImageLib.h \
@@ -605,16 +599,6 @@ compiler_clean: compiler_moc_header_clean
 		svg/fill_svg.h \
 		svg/close_svg.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ../obj/CQPaintTools.o CQPaintTools.cpp
-
-../obj/CQWinWidget.o: CQWinWidget.cpp CQWinWidget.h \
-		../../CQUtil/include/CQDrawUtil.h \
-		svg/maximize_svg.h \
-		../../CQUtil/include/CQPixmapCache.h \
-		svg/minimize_svg.h \
-		svg/close_svg.h \
-		cursors/select.xbm \
-		cursors/selectmask.xbm
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ../obj/CQWinWidget.o CQWinWidget.cpp
 
 ../obj/CQZoomCursor.o: CQZoomCursor.cpp CQZoomCursor.h \
 		../../CImageLib/include/CImageLib.h \
@@ -658,9 +642,6 @@ compiler_clean: compiler_moc_header_clean
 
 ../obj/moc_CQPaintTools.o: .moc/moc_CQPaintTools.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ../obj/moc_CQPaintTools.o .moc/moc_CQPaintTools.cpp
-
-../obj/moc_CQWinWidget.o: .moc/moc_CQWinWidget.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ../obj/moc_CQWinWidget.o .moc/moc_CQWinWidget.cpp
 
 ../obj/moc_CQZoomCursor.o: .moc/moc_CQZoomCursor.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ../obj/moc_CQZoomCursor.o .moc/moc_CQZoomCursor.cpp
