@@ -3,6 +3,7 @@
 #include <CFileMgrDir.h>
 #include <CFileMgrFile.h>
 #include <CPixelRenderer.h>
+#include <CImageLib.h>
 
 CFileMgrDetails::
 CFileMgrDetails(CFileMgr *file_mgr) :

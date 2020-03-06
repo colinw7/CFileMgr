@@ -19,15 +19,15 @@
 CFileMgr::
 CFileMgr()
 {
-  config_ = new CConfig("CFileMgr");
+  config_ = std::make_unique<CConfig>("CFileMgr");
 
   dirname_ = COSFile::getCurrentDir();
 
-  icons_     = new CFileMgrIcons    (this);
-  filmstrip_ = new CFileMgrFilmstrip(this);
-  details_   = new CFileMgrDetails  (this);
+  icons_     = std::make_unique<CFileMgrIcons    >(this);
+  filmstrip_ = std::make_unique<CFileMgrFilmstrip>(this);
+  details_   = std::make_unique<CFileMgrDetails  >(this);
 
-  dir_ = new CFileMgrDir(this);
+  dir_ = std::make_unique<CFileMgrDir>(this);
 
   setIconSize();
 }

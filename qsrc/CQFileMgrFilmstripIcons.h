@@ -24,7 +24,7 @@ class CQFileMgrFilmstripIcons : public CQPixelRendererScrolledCanvas {
   void selectAll();
   void selectNone();
 
-  void scrolled();
+  void scrolled() override;
 
   void mousePress  (const CMouseEvent &event) override;
   void mouseMotion (const CMouseEvent &event) override;
@@ -41,7 +41,7 @@ class CQFileMgrFilmstripIcons : public CQPixelRendererScrolledCanvas {
   void updateSize();
 
  private:
-  void contextMenuEvent(QContextMenuEvent *event);
+  void contextMenuEvent(QContextMenuEvent *event) override;
 
  private:
   CQFileMgr *filemgr_ { nullptr };

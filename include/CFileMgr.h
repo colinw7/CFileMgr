@@ -1,15 +1,16 @@
 #ifndef CFILE_MGR_H
 #define CFILE_MGR_H
 
-#include <map>
-
 #include <COrientation.h>
 #include <CISize2D.h>
 #include <CFileType.h>
 #include <CImagePtr.h>
 #include <CFileMgrDir.h>
 #include <CFileMgrDetails.h>
-#include <CAutoPtr.h>
+
+#include <memory>
+#include <map>
+
 
 class CFileMgrIcons;
 class CFileMgrFilmstrip;
@@ -46,9 +47,9 @@ class CFileMgr {
   void setFilmstripView() { setViewType(VIEW_FILMSTRIP); }
   void setDetailsView  () { setViewType(VIEW_DETAILS  ); }
 
-  CFileMgrIcons     *getIcons    () const { return icons_    ; }
-  CFileMgrFilmstrip *getFilmstrip() const { return filmstrip_; }
-  CFileMgrDetails   *getDetails  () const { return details_  ; }
+  CFileMgrIcons     *getIcons    () const { return icons_    .get(); }
+  CFileMgrFilmstrip *getFilmstrip() const { return filmstrip_.get(); }
+  CFileMgrDetails   *getDetails  () const { return details_  .get(); }
 
   const std::string &getDirName() const { return dirname_; }
 
@@ -57,9 +58,9 @@ class CFileMgr {
   void undoDir();
   void redoDir();
 
-  CFileMgrDir *getDir() const { return dir_; }
+  CFileMgrDir *getDir() const { return dir_.get(); }
 
-  CConfig *getConfig() const { return config_; }
+  CConfig *getConfig() const { return config_.get(); }
 
   void setBorder(int border) { border_ = border; }
   int getBorder() const { return border_; }
@@ -186,26 +187,31 @@ class CFileMgr {
   void drawFileBorder(CPixelRenderer *renderer, int x, int y, bool selected);
 
  private:
-  typedef std::map<std::string,CImagePtr> ImageMap;
-  typedef std::vector<std::string>        DirStack;
+  using ImageMap          = std::map<std::string,CImagePtr>;
+  using DirStack          = std::vector<std::string>;
+  using FileMgrIconsP     = std::unique_ptr<CFileMgrIcons>;
+  using FileMgrFilmstripP = std::unique_ptr<CFileMgrFilmstrip>;
+  using FileMgrDetailsP   = std::unique_ptr<CFileMgrDetails>;
+  using FileMgrDirP       = std::unique_ptr<CFileMgrDir>;
+  using ConfigP           = std::unique_ptr<CConfig>;
 
-  ViewType                    type_ { VIEW_ICONS };
-  std::string                 dirname_;
-  CAutoPtr<CFileMgrIcons>     icons_;
-  CAutoPtr<CFileMgrFilmstrip> filmstrip_;
-  CAutoPtr<CFileMgrDetails>   details_;
-  CAutoPtr<CFileMgrDir>       dir_;
-  CAutoPtr<CConfig>           config_;
-  int                         border_ { 4 };
-  CISize2D                    image_size_;
-  CISize2D                    icon_size_;
-  bool                        show_dot_dot_ { true };
-  bool                        large_icons_ { true };
-  bool                        show_images_ { false };
-  bool                        show_hidden_ { false };
-  bool                        force_rgb_ { false };
-  DirStack                    dir_undo_stack_;
-  DirStack                    dir_redo_stack_;
+  ViewType          type_         { VIEW_ICONS };
+  std::string       dirname_;
+  FileMgrIconsP     icons_;
+  FileMgrFilmstripP filmstrip_;
+  FileMgrDetailsP   details_;
+  FileMgrDirP       dir_;
+  ConfigP           config_;
+  int               border_       { 4 };
+  CISize2D          image_size_;
+  CISize2D          icon_size_;
+  bool              show_dot_dot_ { true };
+  bool              large_icons_  { true };
+  bool              show_images_  { false };
+  bool              show_hidden_  { false };
+  bool              force_rgb_    { false };
+  DirStack          dir_undo_stack_;
+  DirStack          dir_redo_stack_;
 };
 
 #endif

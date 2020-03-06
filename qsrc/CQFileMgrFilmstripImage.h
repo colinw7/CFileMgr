@@ -26,7 +26,7 @@ class CQFileMgrFilmstripImage : public CQPixelRendererScrolledCanvas {
   void showHidden(bool flag);
 
  private:
-  void contextMenuEvent(QContextMenuEvent *event);
+  void contextMenuEvent(QContextMenuEvent *event) override;
 
  private:
   CQFileMgr *filemgr_ { nullptr };

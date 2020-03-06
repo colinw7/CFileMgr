@@ -28,6 +28,9 @@ class CQFileMgrDetails : public QTreeWidget {
   void filmView();
 
  private:
+  using QTreeWidget::selectionChanged;
+
+ private:
   typedef std::vector<int> Aligns;
 
   CQFileMgr *filemgr_ { nullptr };
