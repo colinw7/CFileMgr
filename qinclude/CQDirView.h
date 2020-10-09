@@ -20,9 +20,8 @@ class CQDirView : public QObject, public CDirView {
  public:
  ~CQDirView() { }
 
-  bool getShowImages() const { return show_images_; }
-
-  void setShowImages(bool show_images);
+  bool getShowImages() const { return showImages_; }
+  void setShowImages(bool b);
 
  protected:
   friend class CQDirViewFactory;
@@ -50,7 +49,7 @@ class CQDirView : public QObject, public CDirView {
   void pollChangedSlot();
 
  private:
-  bool show_images_ { false };
+  bool showImages_ { false };
 };
 
 #endif

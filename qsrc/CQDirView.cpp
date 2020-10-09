@@ -44,12 +44,12 @@ setDirName1(const std::string &dirname)
 
 void
 CQDirView::
-setShowImages(bool show_images)
+setShowImages(bool b)
 {
-  if (show_images != show_images_) {
-    show_images_ = show_images;
+  if (b != showImages_) {
+    showImages_ = b;
 
-    emit showImagesChangedSignal(show_images_);
+    emit showImagesChangedSignal(showImages_);
   }
 }
 

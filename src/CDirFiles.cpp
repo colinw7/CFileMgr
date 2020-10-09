@@ -7,7 +7,7 @@
 CDirFiles::
 CDirFiles(CDir *dir)
 {
-  if (dir == NULL) {
+  if (! dir) {
     dir_   = new CDir(CDir::getCurrent());
     owner_ = true;
   }
@@ -61,8 +61,7 @@ getFile(int pos)
 {
   if (pos < 0 || pos > size()) {
     error_msg_ = "Invalid Subscript";
-
-    return NULL;
+    return nullptr;
   }
 
   return files_[pos];
