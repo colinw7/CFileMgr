@@ -25,7 +25,6 @@ CDirView.cpp \
 CFileIcon.cpp \
 CFileNotify.cpp \
 CImageThumbnail.cpp \
-CEncode64.cpp \
 CMime.cpp \
 
 OBJS = $(patsubst %.cpp,$(OBJ_DIR)/%.o,$(SRC))
