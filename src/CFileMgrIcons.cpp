@@ -10,7 +10,7 @@
 
 CFileMgrIcons::
 CFileMgrIcons(CFileMgr *file_mgr) :
- file_mgr_(file_mgr), renderer_(0), size_(0,0)
+ file_mgr_(file_mgr)
 {
   CImage::setResizeType(CIMAGE_RESIZE_BILINEAR);
 }
@@ -26,9 +26,16 @@ setRenderer(CPixelRenderer *renderer)
 {
   renderer_ = renderer;
 
-  CFontPtr font = CFontMgrInst->lookupFont("helvetica", CFONT_STYLE_NORMAL, 8);
+  updateFont();
+}
 
-  if (renderer_ != 0)
+void
+CFileMgrIcons::
+updateFont()
+{
+  auto font = CFontMgrInst->lookupFont("helvetica", CFONT_STYLE_NORMAL, file_mgr_->getFontSize());
+
+  if (renderer_)
     renderer_->setFont(font);
 }
 
@@ -43,7 +50,7 @@ void
 CFileMgrIcons::
 draw()
 {
-  if (renderer_ == 0)
+  if (! renderer_)
     return;
 
   //-----
@@ -55,11 +62,10 @@ draw()
   //-----
 
   // Draw Icons
-
   int x = 0, y = 0;
 
-  CFileMgrDir::file_iterator p1 = file_list.begin();
-  CFileMgrDir::file_iterator p2 = file_list.end  ();
+  auto p1 = file_list.begin();
+  auto p2 = file_list.end  ();
 
   for ( ; p1 != p2; ++p1)
     stepPosition(&x, &y);
@@ -95,7 +101,7 @@ void
 CFileMgrIcons::
 stepPosition(int *x, int *y)
 {
-  if (renderer_ == 0)
+  if (! renderer_)
     return;
 
   *x += file_mgr_->getIconWidth();

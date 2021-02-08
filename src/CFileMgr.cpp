@@ -242,31 +242,31 @@ void
 CFileMgr::
 setIconSize(CPixelRenderer *renderer)
 {
-  int icon_size;
+  int iconSize;
 
   if (getLargeIcons())
-    icon_size = getLargeIconSize();
+    iconSize = getLargeIconSize();
   else
-    icon_size = getSmallIconSize();
+    iconSize = getSmallIconSize();
 
-  image_size_.set(icon_size, icon_size);
+  imageSize_.set(iconSize, iconSize);
 
   int char_height = 8;
 
-  if (renderer != 0)
+  if (renderer)
     char_height = renderer->getCharHeight();
 
-  icon_size_ = getSizeForIcon(icon_size, char_height);
+  iconSize_ = getSizeForIcon(iconSize, char_height);
 }
 
 CISize2D
 CFileMgr::
-getSizeForIcon(int icon_size, int char_height) const
+getSizeForIcon(int iconSize, int char_height) const
 {
   CISize2D size;
 
-  size.width  = int(icon_size*1.25) + 4*border_;
-  size.height = icon_size + 5*border_ + char_height;
+  size.width  = int(iconSize*1.25) + 4*border_;
+  size.height = iconSize + 5*border_ + char_height;
 
   return size;
 }
@@ -275,12 +275,12 @@ int
 CFileMgr::
 getSmallIconSize() const
 {
-  int icon_size;
+  int iconSize;
 
-  if (! config_->getValue("smallIconSize", &icon_size))
-    icon_size = 32;
+  if (! config_->getValue("smallIconSize", &iconSize))
+    iconSize = 32;
 
-  return icon_size;
+  return iconSize;
 }
 
 void
@@ -296,12 +296,12 @@ int
 CFileMgr::
 getLargeIconSize() const
 {
-  int icon_size;
+  int iconSize;
 
-  if (! config_->getValue("largeIconSize", &icon_size))
-    icon_size = 64;
+  if (! config_->getValue("largeIconSize", &iconSize))
+    iconSize = 64;
 
-  return icon_size;
+  return iconSize;
 }
 
 void
@@ -311,6 +311,31 @@ setLargeIconSize(int s)
   config_->setValue("largeIconSize", s);
 
   CFileIconMgrInst->setLargeIconSize(s);
+}
+
+int
+CFileMgr::
+getFontSize() const
+{
+  int fontSize;
+
+  if (! config_->getValue("fontSize", &fontSize))
+    fontSize = 8;
+
+  return fontSize;
+}
+
+void
+CFileMgr::
+setFontSize(int s)
+{
+  config_->setValue("fontSize", s);
+
+  icons_    ->updateFont();
+  filmstrip_->updateFont();
+  details_  ->updateFont();
+
+  setIconSize();
 }
 
 void

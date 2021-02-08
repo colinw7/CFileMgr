@@ -17,8 +17,7 @@ class CFileMgrFilmstrip {
 
   CFileMgr *getFileMgr() const { return file_mgr_; }
 
-  void setRenderers(CPixelRenderer *image_renderer,
-                    CPixelRenderer *icons_renderer);
+  void setRenderers(CPixelRenderer *image_renderer, CPixelRenderer *icons_renderer);
 
   void setImageRenderer(CPixelRenderer *renderer);
   void setIconsRenderer(CPixelRenderer *renderer);
@@ -28,6 +27,8 @@ class CFileMgrFilmstrip {
 
   int getWidth () const { return size_.width; }
   int getHeight() const { return size_.height; }
+
+  void updateFont();
 
   void redraw();
 
@@ -43,7 +44,7 @@ class CFileMgrFilmstrip {
   void stepPosition(int *x);
 
  private:
-  CFileMgr       *file_mgr_ { nullptr };
+  CFileMgr       *file_mgr_       { nullptr };
   CPixelRenderer *image_renderer_ { nullptr };
   CPixelRenderer *icons_renderer_ { nullptr };
   CISize2D        size_;

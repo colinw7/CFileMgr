@@ -7,7 +7,7 @@
 
 CFileMgrDetails::
 CFileMgrDetails(CFileMgr *file_mgr) :
- file_mgr_(file_mgr), renderer_(0), scroll_start_(0.0), scroll_end_(1.0)
+ file_mgr_(file_mgr)
 {
   columns_.push_back(CFileMgrColumnData("Name", CHALIGN_TYPE_LEFT ));
   columns_.push_back(CFileMgrColumnData("Perm", CHALIGN_TYPE_LEFT ));
@@ -29,10 +29,16 @@ setRenderer(CPixelRenderer *renderer)
 {
   renderer_ = renderer;
 
-  CFontPtr font =
-    CFontMgrInst->lookupFont("helvetica", CFONT_STYLE_NORMAL, 8);
+  updateFont();
+}
 
-  if (renderer_ != 0)
+void
+CFileMgrDetails::
+updateFont()
+{
+  auto font = CFontMgrInst->lookupFont("helvetica", CFONT_STYLE_NORMAL, file_mgr_->getFontSize());
+
+  if (renderer_)
     renderer_->setFont(font);
 }
 
@@ -55,8 +61,8 @@ loadDir()
 {
   setColumns(columns_);
 
-  CFileMgrDir::file_iterator p1 = file_mgr_->fileBegin();
-  CFileMgrDir::file_iterator p2 = file_mgr_->fileEnd  ();
+  auto p1 = file_mgr_->fileBegin();
+  auto p2 = file_mgr_->fileEnd  ();
 
   deleteAllRows();
 

@@ -11,7 +11,7 @@
 
 CFileMgrFile::
 CFileMgrFile(CFileMgrDir *dir, const std::string &filename) :
- dir_(dir), file_(filename), row_(0), selected_(false)
+ dir_(dir), file_(filename)
 {
 }
 
@@ -61,7 +61,7 @@ getImage(int width, int height)
     image_ = CImageMgrInst->createImage(src);
 
     if (dir_->getFileMgr()->getForceRGB()) {
-      if (! image_.isValid() && image_->hasColormap())
+      if (image_.isValid() && image_->hasColormap())
         image_->convertToRGB();
     }
   }

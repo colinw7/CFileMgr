@@ -11,16 +11,6 @@ class CFileMgr;
 class CFileMgrDir;
 
 class CFileMgrFile {
- private:
-  CFileMgrDir *dir_;
-  CFile        file_;
-  CIBBox2D     bbox_;
-  int          row_;
-  CImagePtr    image_;
-  CImagePtr    timage_;
-  CISize2D     image_size_;
-  bool         selected_;
-
  public:
   CFileMgrFile(CFileMgrDir *dir, const std::string &filename);
  ~CFileMgrFile();
@@ -58,6 +48,16 @@ class CFileMgrFile {
   std::string getType();
 
   std::string getValue(const std::string &name);
+
+ private:
+  CFileMgrDir *dir_        { nullptr };
+  CFile        file_;
+  CIBBox2D     bbox_;
+  int          row_        { 0 };
+  CImagePtr    image_;
+  CImagePtr    timage_;
+  CISize2D     image_size_ { 0, 0 };
+  bool         selected_   { false };
 };
 
 #endif

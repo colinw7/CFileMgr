@@ -41,7 +41,14 @@ setIconsRenderer(CPixelRenderer *renderer)
 {
   icons_renderer_ = renderer;
 
-  CFontPtr font = CFontMgrInst->lookupFont("helvetica", CFONT_STYLE_NORMAL, 8);
+  updateFont();
+}
+
+void
+CFileMgrFilmstrip::
+updateFont()
+{
+  auto font = CFontMgrInst->lookupFont("helvetica", CFONT_STYLE_NORMAL, file_mgr_->getFontSize());
 
   if (icons_renderer_ != 0)
     icons_renderer_->setFont(font);

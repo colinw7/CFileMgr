@@ -11,7 +11,6 @@
 #include <memory>
 #include <map>
 
-
 class CFileMgrIcons;
 class CFileMgrFilmstrip;
 class CFileMgrDetails;
@@ -65,13 +64,16 @@ class CFileMgr {
   void setBorder(int border) { border_ = border; }
   int getBorder() const { return border_; }
 
-  const CISize2D &getImageSize() const { return image_size_; }
+  const CISize2D &getImageSize() const { return imageSize_; }
 
-  int getImageWidth () const { return image_size_.width ; }
-  int getImageHeight() const { return image_size_.height; }
+  int getImageWidth () const { return imageSize_.width ; }
+  int getImageHeight() const { return imageSize_.height; }
 
-  int getIconWidth () const { return icon_size_.width ; }
-  int getIconHeight() const { return icon_size_.height; }
+  int getIconWidth () const { return iconSize_.width ; }
+  int getIconHeight() const { return iconSize_.height; }
+
+  int getFontSize() const;
+  void setFontSize(int s);
 
   int getSmallIconSize() const;
   void setSmallIconSize(int s);
@@ -101,7 +103,7 @@ class CFileMgr {
 
   void setForceRGB(bool force_rgb = true);
 
-  CISize2D getSizeForIcon(int icon_size, int char_height) const;
+  CISize2D getSizeForIcon(int iconSize, int char_height) const;
 
  private:
   void setIconSize();
@@ -122,9 +124,9 @@ class CFileMgr {
   virtual void drawFilmstripIcons();
   virtual void drawDetails();
 
-  virtual void buttonPress(const CMouseEvent &event);
+  virtual void buttonPress  (const CMouseEvent &event);
   virtual void buttonRelease(const CMouseEvent &event);
-  virtual void buttonMotion(const CMouseEvent &event);
+  virtual void buttonMotion (const CMouseEvent &event);
 
   virtual void keyPress  (const CKeyEvent &event);
   virtual void keyRelease(const CKeyEvent &event);
@@ -203,8 +205,8 @@ class CFileMgr {
   FileMgrDirP       dir_;
   ConfigP           config_;
   int               border_       { 4 };
-  CISize2D          image_size_;
-  CISize2D          icon_size_;
+  CISize2D          imageSize_;
+  CISize2D          iconSize_;
   bool              show_dot_dot_ { true };
   bool              large_icons_  { true };
   bool              show_images_  { false };

@@ -12,12 +12,14 @@ class CFileMgrFile;
 
 struct CFileMgrColumnData {
   std::string name;
-  CHAlignType align;
+  CHAlignType align { CHALIGN_TYPE_LEFT };
 
   CFileMgrColumnData(const std::string &name1, CHAlignType align1=CHALIGN_TYPE_LEFT) :
    name(name1), align(align1) {
   }
 };
+
+//---
 
 class CFileMgrDetails {
  public:
@@ -31,6 +33,8 @@ class CFileMgrDetails {
   void setRenderer(CPixelRenderer *renderer);
 
   CPixelRenderer *getRenderer() const { return renderer_; }
+
+  void updateFont();
 
   void redraw();
   void draw();
@@ -73,11 +77,11 @@ class CFileMgrDetails {
   CFileMgrFile *rowToFile(int row);
 
  public:
-  CFileMgr       *file_mgr_;
-  CPixelRenderer *renderer_;
-  double          offset_;
-  double          scroll_start_;
-  double          scroll_end_;
+  CFileMgr       *file_mgr_     { nullptr };
+  CPixelRenderer *renderer_     { nullptr };
+  double          offset_       { 0.0 };
+  double          scroll_start_ { 0.0 };
+  double          scroll_end_   { 0.0 };
   ColumnList      columns_;
 };
 

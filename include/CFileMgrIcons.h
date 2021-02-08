@@ -24,6 +24,8 @@ class CFileMgrIcons {
   int getWidth () const { return size_.width; }
   int getHeight() const { return size_.height; }
 
+  void updateFont();
+
   void redraw();
   void draw();
 
@@ -36,7 +38,7 @@ class CFileMgrIcons {
  private:
   CFileMgr       *file_mgr_ { nullptr };
   CPixelRenderer *renderer_ { nullptr };
-  CISize2D        size_ { 0, 0 };
+  CISize2D        size_     { 0, 0 };
 };
 
 #endif
