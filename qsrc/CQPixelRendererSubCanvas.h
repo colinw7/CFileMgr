@@ -17,45 +17,45 @@ class CQPixelRendererSubCanvas : public CQPixelRendererCanvas {
 
  ~CQPixelRendererSubCanvas() { }
 
-  virtual void draw() {
+  void draw() override {
     scanvas_->draw();
   }
 
-  virtual void resize() {
+  void resize() override {
     scanvas_->updateScrollbars();
 
     scanvas_->resize();
   }
 
-  virtual void mousePress(const CMouseEvent &event) {
+  void mousePress(const CMouseEvent &event) override {
     scanvas_->mousePress(event);
   }
 
-  virtual void mouseMotion(const CMouseEvent &event) {
+  void mouseMotion(const CMouseEvent &event) override {
     scanvas_->mouseMotion(event);
   }
 
-  virtual void mouseRelease(const CMouseEvent &event) {
+  void mouseRelease(const CMouseEvent &event) override {
     scanvas_->mouseRelease(event);
   }
 
-  virtual void pointerMotion(const CMouseEvent &event) {
+  void pointerMotion(const CMouseEvent &event) override {
     scanvas_->pointerMotion(event);
   }
 
-  virtual void selectionNotify(CButtonAction action) {
+  void selectionNotify(CButtonAction action) override {
     scanvas_->selectionNotify(action);
   }
 
-  virtual void keyPress(const CKeyEvent &event) {
+  void keyPress(const CKeyEvent &event) override {
     scanvas_->keyPress(event);
   }
 
-  virtual void keyRelease(const CKeyEvent &event) {
+  void keyRelease(const CKeyEvent &event) override {
     scanvas_->keyRelease(event);
   }
 
-  virtual void scroll(int delta) {
+  void scroll(int delta) override {
     scanvas_->scroll(delta);
   }
 

@@ -72,7 +72,7 @@ CQFileMgr(QWidget *parent) :
 
   //------
 
-  QVBoxLayout *layout = new QVBoxLayout(this);
+  auto *layout = new QVBoxLayout(this);
   layout->setMargin(0); layout->setSpacing(0);
 
   //------
@@ -92,7 +92,7 @@ CQFileMgr(QWidget *parent) :
 
   //------
 
-  QSplitter *splitter = new QSplitter;
+  auto *splitter = new QSplitter;
   splitter->setObjectName("splitter");
 
   layout->addWidget(splitter);
@@ -102,10 +102,10 @@ CQFileMgr(QWidget *parent) :
   places_frame_ = new QWidget;
   places_frame_->setObjectName("places");
 
-  QVBoxLayout *places_layout = new QVBoxLayout(places_frame_);
+  auto *places_layout = new QVBoxLayout(places_frame_);
   places_layout->setMargin(2); places_layout->setSpacing(2);
 
-  QLabel *label = new QLabel("Places");
+  auto *label = new QLabel("Places");
 
   places_layout->addWidget(label);
 
@@ -117,12 +117,12 @@ CQFileMgr(QWidget *parent) :
 
   //------
 
-  QWidget *browser = new QWidget;
+  auto *browser = new QWidget;
   browser->setObjectName("browser");
 
   browser->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-  QVBoxLayout *vlayout = new QVBoxLayout(browser);
+  auto *vlayout = new QVBoxLayout(browser);
   vlayout->setMargin(0); vlayout->setSpacing(0);
 
   //------
@@ -132,7 +132,7 @@ CQFileMgr(QWidget *parent) :
 
   icons_frame_->setObjectName("icons_frame");
 
-  QVBoxLayout *vlayout1 = new QVBoxLayout(icons_frame_);
+  auto *vlayout1 = new QVBoxLayout(icons_frame_);
   vlayout1->setMargin(0); vlayout1->setSpacing(0);
 
   icons_canvas_ = new CQFileMgrIcons(icons_frame_, this);
@@ -146,7 +146,7 @@ CQFileMgr(QWidget *parent) :
 
   filmstrip_frame_->setObjectName("filmstrip_frame");
 
-  QVBoxLayout *vlayout2 = new QVBoxLayout(filmstrip_frame_);
+  auto *vlayout2 = new QVBoxLayout(filmstrip_frame_);
   vlayout2->setMargin(0); vlayout2->setSpacing(0);
 
   filmstrip_image_canvas_ = new CQFileMgrFilmstripImage(filmstrip_frame_, this);
@@ -165,7 +165,7 @@ CQFileMgr(QWidget *parent) :
 
   details_frame_->setObjectName("details_frame");
 
-  QVBoxLayout *vlayout3 = new QVBoxLayout(details_frame_);
+  auto *vlayout3 = new QVBoxLayout(details_frame_);
   vlayout3->setMargin(0); vlayout3->setSpacing(0);
 
   details_table_ = new CQFileMgrDetails(details_frame_, this);
@@ -380,7 +380,7 @@ CQFileMgr::
 getContentsWidth() const
 {
   if (filemgr_->getViewType() == CFileMgr::VIEW_FILMSTRIP) {
-    CFileMgrFilmstrip *filmstrip = filemgr_->getFilmstrip();
+    auto *filmstrip = filemgr_->getFilmstrip();
 
     if (filmstrip)
       return filmstrip->getWidth();
@@ -394,7 +394,7 @@ CQFileMgr::
 getContentsHeight() const
 {
   if (filemgr_->getViewType() == CFileMgr::VIEW_ICONS) {
-    CFileMgrIcons *icons = filemgr_->getIcons();
+    auto *icons = filemgr_->getIcons();
 
     if (icons)
       return icons->getHeight();
@@ -615,7 +615,7 @@ void
 CQFileMgr::
 setTableColumns(const CFileMgrDetails::ColumnList &columns)
 {
-  CQFileMgrDetails *table = getDetailsTable();
+  auto *table = getDetailsTable();
 
   table->setColumns(columns);
 }
@@ -624,7 +624,7 @@ void
 CQFileMgr::
 deleteAllTableRows()
 {
-  CQFileMgrDetails *table = getDetailsTable();
+  auto *table = getDetailsTable();
 
   table->clear();
 }
@@ -633,7 +633,7 @@ void
 CQFileMgr::
 addTableRow(CFileMgrFile *file, const std::vector<std::string> &values)
 {
-  CQFileMgrDetails *table = getDetailsTable();
+  auto *table = getDetailsTable();
 
   table->addRow(file, values);
 }
@@ -773,7 +773,7 @@ showInfo()
 
   CFileMgrDir::FileList selected = filemgr_->getSelected();
 
-  CFileMgrFile *file = 0;
+  CFileMgrFile *file = nullptr;
 
   if (! selected.empty())
     file = *selected.begin();
