@@ -28,13 +28,13 @@ class CQDirBarItem : public QWidget {
 
   int getMinWidth();
 
-  QSize sizeHint() const;
-  QSize minimumSizeHint() const;
+  QSize sizeHint() const override;
+  QSize minimumSizeHint() const override;
 
  private:
-  void mousePressEvent(QMouseEvent *event);
+  void mousePressEvent(QMouseEvent *event) override;
 
-  void paintEvent(QPaintEvent *event);
+  void paintEvent(QPaintEvent *event) override;
 
  private:
   CQDirBar *bar_        { 0 };
@@ -55,8 +55,8 @@ class CQDirBar : public QWidget {
   CQDirBar(QWidget *parent=0);
  ~CQDirBar();
 
-  QSize sizeHint() const;
-  QSize minimumSizeHint() const;
+  QSize sizeHint() const override;
+  QSize minimumSizeHint() const override;
 
  private:
   void setNumWidgets(uint num_widgets);
