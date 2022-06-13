@@ -104,7 +104,7 @@ addDirFiles(CQFileItem *file, const std::string &dirname, CQFileVisitor *visitor
 
   CDir::getFilenames(".", files);
 
-  uint n = files.size();
+  uint n = uint(files.size());
 
   for (uint i = 0; i < n; ++i) {
     const std::string &filename = files[i];
