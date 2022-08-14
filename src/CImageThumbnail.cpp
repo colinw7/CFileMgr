@@ -31,7 +31,7 @@ CThumbnailMgr()
   valid_ = (CFile::exists(image_dir_) && CFile::isDirectory(image_dir_));
 
   if (! valid_)
-    std::cerr << image_dir_ << " is invalid directory" << std::endl;
+    std::cerr << image_dir_ << " is invalid directory\n";
 }
 
 CThumbnailMgr::
@@ -47,14 +47,14 @@ getImage(const std::string &filename, uint width, uint height)
     return CImagePtr();
 
   if (width < 1 || height < 1) {
-    std::cerr << "Invalid size " << width << "x" << height << std::endl;
+    std::cerr << "Invalid size " << width << "x" << height << "\n";
     return CImagePtr();
   }
 
   CFile imgfile(filename);
 
   if (! imgfile.exists() && ! imgfile.isRegular()) {
-    std::cerr << "Invalid image file " << filename << std::endl;
+    std::cerr << "Invalid image file " << filename << "\n";
     return CImagePtr();
   }
 
@@ -97,14 +97,14 @@ getImage(const std::string &filename, uint width, uint height)
   CImagePtr image = CImageMgrInst->createImage(src);
 
   if (! image.isValid()) {
-    std::cerr << "Invalid image file " << filename << std::endl;
+    std::cerr << "Invalid image file " << filename << "\n";
     return CImagePtr();
   }
 
   if (image->getWidth() > width || image->getHeight() > height) {
     image->convertToRGB();
 
-    image = image->resizeKeepAspect(width, height);
+    image = image->resizeKeepAspect(int(width), int(height));
   }
 
   image->writePNG(&thumbfile);

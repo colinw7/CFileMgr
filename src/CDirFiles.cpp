@@ -27,7 +27,7 @@ CDirFiles(const char *dirname)
 CDirFiles::
 ~CDirFiles()
 {
-  for (int i = 0; i < size(); i++)
+  for (uint i = 0; i < size(); i++)
     delete files_[i];
 
   if (owner_)
@@ -59,12 +59,12 @@ CFile *
 CDirFiles::
 getFile(int pos)
 {
-  if (pos < 0 || pos > size()) {
+  if (pos < 0 || uint(pos) > size()) {
     error_msg_ = "Invalid Subscript";
     return nullptr;
   }
 
-  return files_[pos];
+  return files_[uint(pos)];
 }
 
 void

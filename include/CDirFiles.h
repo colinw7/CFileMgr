@@ -23,7 +23,7 @@ class CDirFiles {
 
  ~CDirFiles();
 
-  int size() { return files_.size(); }
+  uint size() { return uint(files_.size()); }
 
   bool addFilename(const std::string &filename);
   void addDirFilename(const std::string &filename);

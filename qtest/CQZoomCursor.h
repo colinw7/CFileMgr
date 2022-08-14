@@ -6,7 +6,6 @@
 
 #include <QObject>
 #include <CImageLib.h>
-#include <CAutoPtr.h>
 
 class CQZoomCursor : QObject {
   Q_OBJECT
@@ -43,16 +42,16 @@ class CQZoomCursor : QObject {
   double remapPos(double pos);
 
  private:
-  CImagePtr     image_;                   // original unzoomed image
-  CImagePtr     zimage_;                  // image for overlay
-  CISize2D      size_ { 0, 0 };           // size of the display area
-  Shape         shape_ { Shape::CIRCLE }; // shape of the display area
-  CIPoint2D     pos_;                     // last displayed position of the area
-  bool          pos_valid_ { false };     // last position valid state
-  double        factor_ { 2.0 };          // zoom factor of the current zoomed display
-  CAutoPtr<int> cursor_map_x_;
-  CAutoPtr<int> cursor_map_y_;
-  bool          cursor_map_valid_ { false };
+  CImagePtr        image_;                   // original unzoomed image
+  CImagePtr        zimage_;                  // image for overlay
+  CISize2D         size_ { 0, 0 };           // size of the display area
+  Shape            shape_ { Shape::CIRCLE }; // shape of the display area
+  CIPoint2D        pos_;                     // last displayed position of the area
+  bool             pos_valid_ { false };     // last position valid state
+  double           factor_ { 2.0 };          // zoom factor of the current zoomed display
+  std::vector<int> cursor_map_x_;
+  std::vector<int> cursor_map_y_;
+  bool             cursor_map_valid_ { false };
 };
 
 #endif

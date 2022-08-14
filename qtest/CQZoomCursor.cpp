@@ -49,8 +49,8 @@ getImage(CIPoint2D &pos)
 {
   updateImage(pos);
 
-  uint w = size_.getWidth ();
-  uint h = size_.getHeight();
+  int w = size_.getWidth ();
+  int h = size_.getHeight();
 
   pos = CIPoint2D(pos.x - w/2, pos.y - h/2);
 
@@ -100,10 +100,9 @@ updateImage(const CIPoint2D &pos)
 
       CRGBA rgba;
 
-      if (cursor_map_x_[i] != -999 &&
-          cursor_map_y_[i] != -999) {
-        int x1 = mx + cursor_map_x_[i];
-        int y1 = my + cursor_map_y_[i];
+      if (cursor_map_x_[size_t(i)] != -999 && cursor_map_y_[size_t(i)] != -999) {
+        int x1 = mx + cursor_map_x_[size_t(i)];
+        int y1 = my + cursor_map_y_[size_t(i)];
 
         // get pixel from orginal image and put in zoom image
         if (image_->validPixel(x1, y1)) {
@@ -136,33 +135,35 @@ setCursorMap()
   // dependent on:
   //   size_
 
-  uint w = size_.getWidth ();
-  uint h = size_.getHeight();
+  int w = size_.getWidth ();
+  int h = size_.getHeight();
 
-  cursor_map_x_.set(new int [w*h]);
-  cursor_map_y_.set(new int [w*h]);
+  int s = w*h;
+
+  cursor_map_x_.resize(uint(s));
+  cursor_map_y_.resize(uint(s));
 
   double r = std::max(w, h)/2.0;
 
   double r2 = r*r;
 
-  for (uint i = 0, y = 0; y < h; ++y) {
+  for (int i = 0, y = 0; y < h; ++y) {
     double dy  = y - r;
     double dy2 = dy*dy;
 
-    for (uint x = 0; x < w; ++x, ++i) {
+    for (int x = 0; x < w; ++x, ++i) {
       double dx  = x - r;
       double dx2 = dx*dx;
 
       double d = (dx2 + dy2)/r2;
 
       if (d <= 1) {
-        cursor_map_x_[i] = int(dx > 0 ? remapPos(dx) : -remapPos(-dx));
-        cursor_map_y_[i] = int(dy > 0 ? remapPos(dy) : -remapPos(-dy));
+        cursor_map_x_[size_t(i)] = int(dx > 0 ? remapPos(dx) : -remapPos(-dx));
+        cursor_map_y_[size_t(i)] = int(dy > 0 ? remapPos(dy) : -remapPos(-dy));
       }
       else {
-        cursor_map_x_[i] = -999;
-        cursor_map_y_[i] = -999;
+        cursor_map_x_[size_t(i)] = -999;
+        cursor_map_y_[size_t(i)] = -999;
       }
     }
   }
