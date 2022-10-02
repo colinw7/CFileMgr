@@ -93,11 +93,11 @@ getFileType(const std::string &filename)
 
   ++pos;
 
-  pos2 = pos;
+  pos2 = int(pos);
 
   CStrUtil::skipSpace(output, &pos2);
 
-  pos = pos2;
+  pos = std::string::size_type(pos2);
 
   /* Nothing found OR not in MIME format of type/subtype */
 

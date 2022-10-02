@@ -101,8 +101,8 @@ drawImage()
     CImagePtr image = file->getImage(width, height);
 
     if (image.isValid()) {
-      int x = (width  - (int) image->getWidth ())/2;
-      int y = (height - (int) image->getHeight())/2;
+      int x = (width  - int(image->getWidth ()))/2;
+      int y = (height - int(image->getHeight()))/2;
 
       image_renderer_->drawAlphaImage(CIPoint2D(x, y), image);
     }

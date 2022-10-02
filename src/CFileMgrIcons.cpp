@@ -106,7 +106,7 @@ stepPosition(int *x, int *y)
 
   *x += file_mgr_->getIconWidth();
 
-  if (*x + file_mgr_->getIconWidth() >= (int) renderer_->getWidth()) {
+  if (*x + file_mgr_->getIconWidth() >= int(renderer_->getWidth())) {
     *x  = 0;
     *y += file_mgr_->getIconHeight();
   }

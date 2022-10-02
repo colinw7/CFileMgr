@@ -44,9 +44,9 @@ reload(const std::string &dirname, bool force)
     file_list_.push_back(file);
   }
 
-  int num_files = files.size();
+  auto num_files = files.size();
 
-  for (int i = 0; i < num_files; ++i) {
+  for (uint i = 0; i < num_files; ++i) {
     CFileMgrFile *file = new CFileMgrFile(this, files[i]);
 
     file_list_.push_back(file);

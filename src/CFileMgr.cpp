@@ -854,8 +854,8 @@ drawDir(CPixelRenderer *renderer, int x, int y, CFileMgrFile *file)
   int x2 = x + icon_width  - 1;
   int y2 = y + icon_height - 1;
 
-  bool visible = (x2 >= 0 && x1 < (int) renderer->getWidth() &&
-                  y2 >= 0 && y1 < (int) renderer->getHeight());
+  bool visible = (x2 >= 0 && x1 < int(renderer->getWidth ()) &&
+                  y2 >= 0 && y1 < int(renderer->getHeight()));
 
   CIPoint2D p1(x1, y1);
   CIPoint2D p2(x2, y2);
@@ -895,8 +895,8 @@ drawFile(CPixelRenderer *renderer, int x, int y, CFileMgrFile *file)
   int x2 = x + icon_width  - 1;
   int y2 = y + icon_height - 1;
 
-  bool visible = (x2 >= 0 && x1 < (int) renderer->getWidth() &&
-                  y2 >= 0 && y1 < (int) renderer->getHeight());
+  bool visible = (x2 >= 0 && x1 < int(renderer->getWidth ()) &&
+                  y2 >= 0 && y1 < int(renderer->getHeight()));
 
   CIPoint2D p1(x1, y1);
   CIPoint2D p2(x2, y2);

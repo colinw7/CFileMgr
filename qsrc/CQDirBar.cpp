@@ -193,7 +193,7 @@ paintEvent(QPaintEvent *event)
   int y2 = (rect.top() + rect.bottom())/2;
   int y3 = rect.bottom();
 
-  QColor bg = palette().background().color();
+  QColor bg = palette().window().color();
 
   painter.setPen(bg.darker(110));
 
@@ -237,7 +237,7 @@ minimumSizeHint() const
 {
   QFontMetrics fm(font());
 
-  int w = fm.width(text_) + 2*border_ + arrowWidth_;
+  int w = fm.horizontalAdvance(text_) + 2*border_ + arrowWidth_;
   int h = fm.height() + 4;
 
   return QSize(w, h);

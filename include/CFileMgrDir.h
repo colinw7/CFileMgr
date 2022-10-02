@@ -21,7 +21,7 @@ class CFileMgrDir {
 
   void setDirName(const std::string &dirname) { dirname_ = dirname; }
 
-  uint numFiles() { return file_list_.size(); }
+  uint numFiles() { return uint(file_list_.size()); }
 
   file_iterator fileBegin() { return file_list_.begin(); }
   file_iterator fileEnd  () { return file_list_.end  (); }

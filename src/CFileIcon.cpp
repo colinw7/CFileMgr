@@ -153,7 +153,7 @@ CImagePtr
 CFileIconMgr::
 getContents(const std::string &fileName)
 {
-  return CThumbnailMgrInst->getImage(fileName, getIconWidth(), getIconHeight());
+  return CThumbnailMgrInst->getImage(fileName, uint(getIconWidth()), uint(getIconHeight()));
 
   //CImageSizedFileSrc src(fileName, getIconWidth(), getIconHeight(), true);
 
@@ -211,8 +211,8 @@ getLargeImage(CFileType type)
   }
 
   if (image.isValid()) {
-    if (getIconWidth () != (int) image->getWidth () ||
-        getIconHeight() != (int) image->getHeight())
+    if (getIconWidth () != int(image->getWidth ()) ||
+        getIconHeight() != int(image->getHeight()))
       image = image->resizeKeepAspect(getIconSize());
   }
 
@@ -263,8 +263,8 @@ getSmallImage(CFileType type)
   }
 
   if (image.isValid()) {
-    if (getIconWidth () != (int) image->getWidth () ||
-        getIconHeight() != (int) image->getHeight())
+    if (getIconWidth () != int(image->getWidth ()) ||
+        getIconHeight() != int(image->getHeight()))
       image = image->resizeKeepAspect(getIconSize());
   }
 

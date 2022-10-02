@@ -186,7 +186,7 @@ CQFileMgr(QWidget *parent) :
 
   QFontMetrics fm(font());
 
-  int pw = fm.width("/home/user") + 32;
+  int pw = fm.horizontalAdvance("/home/user") + 32;
 
   places_frame_->setFixedWidth(pw);
 

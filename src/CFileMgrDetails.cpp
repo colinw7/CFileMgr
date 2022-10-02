@@ -176,9 +176,9 @@ addRow(CFileMgrFile *file)
 {
   std::vector<std::string> values;
 
-  int num_values = columns_.size();
+  auto num_values = columns_.size();
 
-  for (int i = 0; i < num_values; ++i)
+  for (uint i = 0; i < num_values; ++i)
     values.push_back(file->getValue(columns_[i].name));
 
   file_mgr_->addTableRow(file, values);
