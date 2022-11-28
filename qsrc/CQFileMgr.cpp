@@ -11,6 +11,7 @@
 
 #include <CQUtil.h>
 #include <CQDirView.h>
+#include <CQStyleMgr.h>
 #include <CFileMgrLib.h>
 #include <CDir.h>
 #include <COSFile.h>
@@ -184,18 +185,18 @@ CQFileMgr(QWidget *parent) :
 
   splitter->addWidget(browser);
 
-  QFontMetrics fm(font());
-
-  int pw = fm.horizontalAdvance("/home/user") + 32;
-
-  places_frame_->setFixedWidth(pw);
-
   //------
 
   filemgr_->setDirName(CDir::getCurrent());
 
   //------
 
+  connect(CQStyleMgrInst, SIGNAL(fontChanged()), this, SLOT(updateSizes()));
+  connect(CQStyleMgrInst, SIGNAL(iconSizeChanged()), this, SLOT(updateFilmstripSize()));
+
+  //------
+
+ updateSizes();
   updateFilmstripSize();
 
   changed();
@@ -223,6 +224,8 @@ setDirName(const std::string &dirName)
 {
   filemgr_->setDirName(dirName);
 }
+
+//---
 
 int
 CQFileMgr::
@@ -257,6 +260,24 @@ setLargeIconSize(int s)
 
   changed();
 }
+
+int
+CQFileMgr::
+getFontSize() const
+{
+  return filemgr_->getFontSize();
+}
+
+void
+CQFileMgr::
+setFontSize(int s)
+{
+  filemgr_->setFontSize(s);
+
+  changed();
+}
+
+//---
 
 void
 CQFileMgr::
@@ -771,7 +792,7 @@ showInfo()
   if (! info_)
     info_ = new CQFileMgrInfo(this);
 
-  CFileMgrDir::FileList selected = filemgr_->getSelected();
+  auto selected = filemgr_->getSelected();
 
   CFileMgrFile *file = nullptr;
 
@@ -788,12 +809,23 @@ showInfo()
 
 void
 CQFileMgr::
+updateSizes()
+{
+  QFontMetrics fm(font());
+
+  int pw = fm.horizontalAdvance("/home/user/XXXXXXXX");
+
+  places_frame_->setFixedWidth(pw);
+}
+
+void
+CQFileMgr::
 updateFilmstripSize()
 {
   int is = getLargeIconSize();
   int fh = QFontMetrics(font()).height();
 
-  CISize2D size = filemgr_->getSizeForIcon(is, fh);
+  auto size = filemgr_->getSizeForIcon(is, fh);
 
   int scrollBarExtent = style()->pixelMetric(QStyle::PM_ScrollBarExtent);
 

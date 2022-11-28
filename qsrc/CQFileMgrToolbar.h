@@ -4,10 +4,12 @@
 #include <QWidget>
 
 class CQFileMgr;
-class CQImageButton;
+class CQIconButton;
 
 class CQFileMgrToolbar : public QWidget {
   Q_OBJECT
+
+  Q_PROPERTY(QSize iconSize READ iconSize WRITE setIconSize)
 
  public:
   enum IconType {
@@ -18,25 +20,39 @@ class CQFileMgrToolbar : public QWidget {
   CQFileMgrToolbar(CQFileMgr *mgr);
  ~CQFileMgrToolbar();
 
+  QSize iconSize() const;
+  void setIconSize(const QSize &s);
+
   void showIcon(IconType type, bool show);
 
- private slots:
+  QSize sizeHint() const override;
+
+ private Q_SLOTS:
+  void updateIconSize();
+
   void updateState();
 
  private:
   void init();
 
  private:
-  CQFileMgr     *mgr_ { nullptr };
-  CQImageButton *backButton_ { nullptr };
-  CQImageButton *forwardButton_ { nullptr };
-  CQImageButton *iconsButton_ { nullptr };
-  CQImageButton *detailsButton_ { nullptr };
-  CQImageButton *stripButton_ { nullptr };
-  CQImageButton *imageButton_ { nullptr };
-  CQImageButton *hiddenButton_ { nullptr };
-  CQImageButton *refreshButton_ { nullptr };
-  CQImageButton *addButton_ { nullptr };
+  CQFileMgr *mgr_ { nullptr };
+
+  CQIconButton *backButton_    { nullptr };
+  CQIconButton *forwardButton_ { nullptr };
+  CQIconButton *iconsButton_   { nullptr };
+  CQIconButton *detailsButton_ { nullptr };
+  CQIconButton *stripButton_   { nullptr };
+  CQIconButton *imageButton_   { nullptr };
+  CQIconButton *hiddenButton_  { nullptr };
+  CQIconButton *refreshButton_ { nullptr };
+  CQIconButton *addButton_     { nullptr };
+
+  using Buttons = std::vector<CQIconButton *>;
+
+  Buttons buttons_;
+
+  QSize iconSize_;
 };
 
 #endif

@@ -22,6 +22,7 @@ class CQFileMgr : public QWidget {
 
   Q_PROPERTY(int smallIconSize READ getSmallIconSize WRITE setSmallIconSize)
   Q_PROPERTY(int largeIconSize READ getLargeIconSize WRITE setLargeIconSize)
+  Q_PROPERTY(int fontSizer     READ getFontSize      WRITE setFontSize)
 
  public:
   CQFileMgr(QWidget *parent=nullptr);
@@ -35,11 +36,18 @@ class CQFileMgr : public QWidget {
   const std::string &getDirName() const;
   void setDirName(const std::string &dirName);
 
+  //---
+
   int getSmallIconSize() const;
   void setSmallIconSize(int s);
 
   int getLargeIconSize() const;
   void setLargeIconSize(int s);
+
+  int getFontSize() const;
+  void setFontSize(int s);
+
+  //---
 
   void showPlaces(bool show);
 
@@ -98,9 +106,11 @@ class CQFileMgr : public QWidget {
 
   void popupMenu(QWidget *widget, int x, int y);
 
+ public Q_SLOTS:
+  void updateSizes();
+
   void updateFilmstripSize();
 
- public slots:
   void undoDir();
   void redoDir();
 

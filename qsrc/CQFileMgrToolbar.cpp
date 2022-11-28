@@ -1,10 +1,12 @@
 #include <CQFileMgrToolbar.h>
 
+#include <CQFileMgr.h>
+#include <CQIconButton.h>
+#include <CQStyleMgr.h>
+
 #include <CConfig.h>
 #include <CDir.h>
 #include <CStrUtil.h>
-#include <CQFileMgr.h>
-#include <CQImageButton.h>
 
 #include <QLineEdit>
 #include <QMouseEvent>
@@ -24,13 +26,15 @@
 
 CQFileMgrToolbar::
 CQFileMgrToolbar(CQFileMgr *mgr) :
- QWidget(0), mgr_(mgr)
+ QWidget(nullptr), mgr_(mgr)
 {
   setObjectName("fileMgrToolbar");
 
   init();
 
   connect(mgr_, SIGNAL(stateChanged()), this, SLOT(updateState()));
+
+  connect(CQStyleMgrInst, SIGNAL(iconSizeChanged()), this, SLOT(updateIconSize()));
 }
 
 CQFileMgrToolbar::
@@ -45,46 +49,36 @@ init()
   QHBoxLayout *layout = new QHBoxLayout(this);
   layout->setMargin(0); layout->setSpacing(2);
 
-  backButton_ = new CQImageButton(CQPixmapCacheInst->getIcon("BACK"));
-  backButton_->setToolTip("Previous Dir");
-  connect(backButton_, SIGNAL(clicked()), mgr_, SLOT(undoDir()));
+  auto createButton = [&](const QString &iconName, const QString &tooltip,
+                          const char *slotName=nullptr) {
+    auto *button = new CQIconButton(iconName);
+    button->setToolTip(tooltip);
+    if (slotName)
+      connect(button, SIGNAL(clicked()), mgr_, slotName);
+    buttons_.push_back(button);
+    return button;
+  };
 
-  forwardButton_ = new CQImageButton(CQPixmapCacheInst->getIcon("FORWARD"));
-  forwardButton_->setToolTip("Next Dir");
-  connect(forwardButton_, SIGNAL(clicked()), mgr_, SLOT(redoDir()));
+  backButton_    = createButton("BACK"   , "Previous Dir", SLOT(undoDir()));
+  forwardButton_ = createButton("FORWARD", "Next Dir"    , SLOT(redoDir()));
 
-  //CQImageButton *up_button = new CQImageButton(QPixmap((const char **) up_data));
+  //auto *up_button = createButton(QPixmap((const char **) up_data));
   //connect(up_button, SIGNAL(clicked()), mgr_, SLOT(parentDir()));
 
-  iconsButton_ = new CQImageButton(CQPixmapCacheInst->getIcon("ICONS"));
-  iconsButton_->setToolTip("Icons View");
-  connect(iconsButton_, SIGNAL(clicked()), mgr_, SLOT(iconsView()));
+  iconsButton_   = createButton("ICONS"  , "Icons View"  , SLOT(iconsView()));
+  detailsButton_ = createButton("DETAILS", "Details View", SLOT(detailsView()));
+  stripButton_   = createButton("STRIP"  , "Strip View"  , SLOT(filmstripView()));
 
-  detailsButton_ = new CQImageButton(CQPixmapCacheInst->getIcon("DETAILS"));
-  detailsButton_->setToolTip("Details View");
-  connect(detailsButton_, SIGNAL(clicked()), mgr_, SLOT(detailsView()));
-
-  stripButton_ = new CQImageButton(CQPixmapCacheInst->getIcon("STRIP"));
-  stripButton_->setToolTip("Strip View");
-  connect(stripButton_, SIGNAL(clicked()), mgr_, SLOT(filmstripView()));
-
-  imageButton_  = new CQImageButton(CQPixmapCacheInst->getIcon("IMAGE"));
-  imageButton_->setToolTip("Show Images");
+  imageButton_  = createButton("IMAGE", "Show Images");
   imageButton_->setCheckable(true);
   connect(imageButton_, SIGNAL(clicked(bool)), mgr_, SLOT(setShowImages(bool)));
 
-  hiddenButton_ = new CQImageButton(CQPixmapCacheInst->getIcon("HIDDEN"));
-  hiddenButton_->setToolTip("Show Hidden");
+  hiddenButton_ = createButton("HIDDEN", "Show Hidden");
   hiddenButton_->setCheckable(true);
   connect(hiddenButton_, SIGNAL(clicked(bool)), mgr_, SLOT(setShowHidden(bool)));
 
-  refreshButton_ = new CQImageButton(CQPixmapCacheInst->getIcon("REFRESH"));
-  refreshButton_->setToolTip("Refresh View");
-  connect(refreshButton_, SIGNAL(clicked()), mgr_, SLOT(refresh()));
-
-  addButton_ = new CQImageButton(CQPixmapCacheInst->getIcon("FAVORITES"));
-  addButton_->setToolTip("Add to Favorties");
-  connect(addButton_, SIGNAL(clicked()), mgr_, SLOT(addToPlaces()));
+  refreshButton_ = createButton("REFRESH"  , "Refresh View"    , SLOT(refresh()));
+  addButton_     = createButton("FAVORITES", "Add to Favorties", SLOT(addToPlaces()));
 
   layout->addWidget(backButton_);
   layout->addWidget(forwardButton_);
@@ -114,7 +108,41 @@ init()
 
   layout->addStretch();
 
-  setFixedHeight(34);
+  //---
+
+  setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+}
+
+QSize
+CQFileMgrToolbar::
+iconSize() const
+{
+  if (! iconSize_.isValid()) {
+    int is = CQStyleMgrInst->iconSize();
+
+    return QSize(is, is);
+  }
+
+  return iconSize_;
+}
+
+void
+CQFileMgrToolbar::
+setIconSize(const QSize &s)
+{
+  iconSize_ = s;
+
+  updateIconSize();
+}
+
+void
+CQFileMgrToolbar::
+updateIconSize()
+{
+  auto s = iconSize();
+
+  for (auto *button : buttons_)
+    button->setIconSize(s);
 }
 
 void
@@ -131,4 +159,13 @@ updateState()
 {
   imageButton_ ->setChecked(mgr_->getShowImages());
   hiddenButton_->setChecked(mgr_->getShowHidden());
+}
+
+QSize
+CQFileMgrToolbar::
+sizeHint() const
+{
+  int is = iconSize().height();
+
+  return QSize(100, is + 4);
 }

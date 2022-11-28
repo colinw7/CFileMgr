@@ -1,6 +1,8 @@
 #include <CQDirBar.h>
 #include <CQDirView.h>
 #include <CQFileMgr.h>
+#include <CQStyleMgr.h>
+#include <CQUtil.h>
 #include <CDir.h>
 #include <CStrUtil.h>
 
@@ -16,26 +18,26 @@ CQDirBar(QWidget *parent) :
 
   setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
 
-  QHBoxLayout *layout = new QHBoxLayout(this);
-  layout->setMargin(0); layout->setSpacing(0);
+  //auto *layout = CQUtil::makeLayout<QHBoxLayout>(this, 0, 0);
 
-  QHBoxLayout *llayout = new QHBoxLayout;
-  llayout->setMargin(0); llayout->setSpacing(0);
+  //auto *llayout = CQUtil::makeLayout<QHBoxLayout>(0, 0);
+  //auto *rlayout = CQUtil::makeLayout<QHBoxLayout>(0, 0);
 
-  QHBoxLayout *rlayout = new QHBoxLayout;
-  rlayout->setMargin(0); rlayout->setSpacing(0);
+  //rlayout->addStretch();
 
-  rlayout->addStretch();
+  //layout->addLayout(llayout);
+  //layout->addLayout(rlayout);
 
-  layout->addLayout(llayout);
-  layout->addLayout(rlayout);
-
-  layout_ = llayout;
+  //layout_ = llayout;
 
   updateDir();
 
+  fontChanged();
+
   connect(CQDirViewInst, SIGNAL(dirChangedSignal(const QString &)),
           this, SLOT(updateDir()));
+
+  connect(CQStyleMgrInst, SIGNAL(fontChanged()), this, SLOT(fontChanged()));
 }
 
 CQDirBar::
@@ -45,9 +47,53 @@ CQDirBar::
 
 void
 CQDirBar::
+setBorder(int b)
+{
+  border_ = b;
+
+  for (auto *widget : widgets_)
+    widget->setBorder(b);
+
+  updateSizes();
+}
+
+void
+CQDirBar::
+setArrowWidth(int w)
+{
+  arrowWidth_ = w;
+
+  for (auto *widget : widgets_)
+    widget->setArrowWidth(w);
+
+  updateSizes();
+}
+
+void
+CQDirBar::
+updateSizes()
+{
+  for (auto *widget : widgets_) {
+    auto ws = widget->sizeHint();
+
+    widget->setFixedSize(ws);
+  }
+}
+
+void
+CQDirBar::
+fontChanged()
+{
+  QFontMetrics fm(font());
+
+  setArrowWidth(fm.height()/3);
+}
+
+void
+CQDirBar::
 updateDir()
 {
-  const std::string &dirname = CDirViewInst->getDirName();
+  const auto &dirname = CDirViewInst->getDirName();
 
   //------
 
@@ -58,31 +104,33 @@ updateDir()
   else
     fields.push_back("");
 
-  uint num_fields = fields.size();
+  auto num_fields = fields.size();
 
   setNumWidgets(num_fields);
 
-  std::string str = "";
+  std::string str;
 
   for (uint i = 0; i < num_fields; ++i) {
+    const auto &field = fields[i];
+
+    auto *widget = widgets_[i];
+
     if (i == 0) {
-      widgets_[i]->setText("/");
-      widgets_[i]->setDir ("/");
+      widget->setText("/");
+      widget->setDir ("/");
     }
     else {
-      str += "/" + fields[i];
+      str += "/" + field;
 
-      widgets_[i]->setText(fields[i].c_str());
-      widgets_[i]->setDir (str.c_str());
+      widget->setText(field.c_str());
+      widget->setDir (str.c_str());
     }
 
-    QSize ws = widgets_[i]->minimumSizeHint();
-
-    widgets_[i]->setFixedSize(ws);
-
-    widgets_[i]->setFirst(i == 0);
-    widgets_[i]->setLast (i == num_fields - 1);
+    widget->setFirst(i == 0);
+    widget->setLast (i == num_fields - 1);
   }
+
+  updateSizes();
 }
 
 void
@@ -91,16 +139,16 @@ setNumWidgets(uint num_widgets)
 {
   if (num_widgets_ < num_widgets) {
     for (uint i = num_widgets_; i < num_widgets; ++i) {
-      CQDirBarItem *item = new CQDirBarItem(this, " ");
+      auto *item = new CQDirBarItem(this, " ");
 
-      layout_->addWidget(item);
+      //layout_->addWidget(item);
 
       widgets_.push_back(item);
     }
   }
   else if (num_widgets_ > num_widgets) {
     for (uint i = num_widgets; i < num_widgets_; ++i) {
-      CQDirBarItem *item = widgets_.back();
+      auto *item = widgets_.back();
 
       widgets_.pop_back();
 
@@ -111,22 +159,109 @@ setNumWidgets(uint num_widgets)
   num_widgets_ = num_widgets;
 }
 
+void
+CQDirBar::
+resizeEvent(QResizeEvent *)
+{
+  QFontMetrics fm(font());
+
+  int x = 0;
+
+  clipped_      = false;
+  clippedWidth_ = 0;
+
+  for (size_t i = 0; i < num_widgets_; ++i) {
+    int i1 = num_widgets_ - 1 - i;
+
+    auto *widget = widgets_[i1];
+
+    if (x + widget->width() > width()) {
+      clippedWidth_ = x;
+      clipped_ = true;
+      break;
+    }
+
+    x += widget->width();
+  }
+
+  int xc = fm.horizontalAdvance("...") + border();
+
+  if (clipped_)
+    x = clippedWidth_ + xc;
+  else
+    x = 0;
+
+  for (size_t i = 0; i < num_widgets_; ++i) {
+    int i1 = num_widgets_ - 1 - i;
+
+    auto *widget = (clipped_ ? widgets_[i1] : widgets_[i]);
+
+    if (clipped_) {
+      int x1 = x - widget->width();
+
+      widget->move(x1, 0);
+
+      widget->setVisible(x1 >= xc);
+      widget->setClipped(x1 < xc);
+
+      x = x1;
+    }
+    else {
+      widget->move(x, 0);
+
+      widget->setVisible(true);
+      widget->setClipped(false);
+
+      x += widget->width();
+    }
+  }
+}
+
+void
+CQDirBar::
+paintEvent(QPaintEvent *)
+{
+  if (clipped_) {
+    QPainter painter(this);
+
+    auto rect = this->rect();
+
+    rect.setWidth(clippedWidth_);
+
+    painter.drawText(rect, "...");
+  }
+}
+
 QSize
 CQDirBar::
 sizeHint() const
 {
-  return minimumSizeHint();
+  int w = 2*border();
+  int h = 2*border();
+
+  for (uint i = 0; i < num_widgets_; ++i) {
+    auto *widget = widgets_[i];
+
+    auto s = widget->sizeHint();
+
+    w += s.width();
+    h = std::max(h, s.height());
+  }
+
+  return QSize(w, h);
 }
 
 QSize
 CQDirBar::
 minimumSizeHint() const
 {
-  int w = 4;
-  int h = 4;
+  int w = 2*border();
+  int h = 2*border();
 
   for (uint i = 0; i < num_widgets_; ++i) {
-    QSize s = widgets_[i]->minimumSizeHint();
+    auto *widget = widgets_[i];
+
+    auto s = widget->minimumSizeHint();
 
     w += s.width();
     h = std::max(h, s.height());
@@ -139,7 +274,7 @@ minimumSizeHint() const
 
 CQDirBarItem::
 CQDirBarItem(CQDirBar *bar, const QString &text) :
- QWidget(0), bar_(bar), text_(text)
+ QWidget(bar), bar_(bar), text_(text)
 {
   setObjectName("item");
 }
@@ -176,24 +311,41 @@ mousePressEvent(QMouseEvent *)
 
 void
 CQDirBarItem::
-paintEvent(QPaintEvent *event)
+paintEvent(QPaintEvent *)
 {
   QPainter painter(this);
 
-  QRect rect  = event->rect();
+  painter.setFont(bar_->font());
 
-  QRect rect1 = rect.adjusted(border_, 0, -border_ - arrowWidth_, 0);
+//auto border     = this->border();
+  auto arrowWidth = this->arrowWidth();
 
-  painter.drawText(rect1, text_);
+  auto rect = this->rect();
 
-  int x1 = rect.left();
-  int x2 = rect.right() - arrowWidth_;
-  int x3 = rect.right();
-  int y1 = rect.top();
-  int y2 = (rect.top() + rect.bottom())/2;
-  int y3 = rect.bottom();
+  auto bg = palette().window().color();
 
-  QColor bg = palette().window().color();
+  painter.fillRect(rect, bg);
+
+  //---
+
+  // draw text
+  auto rect1 = rect.adjusted(0, 0, -arrowWidth, 0);
+
+//painter.fillRect(rect1, Qt::red);
+
+  if (! isClipped())
+    painter.drawText(rect1, text());
+  else
+    painter.drawText(rect1, "...");
+
+  //---
+
+  // draw border
+  int x1 = rect.left (); int y1 = rect.top   ();
+  int x3 = rect.right(); int y3 = rect.bottom();
+
+  int x2 = x3 - arrowWidth;
+  int y2 = (y1 + y3)/2;
 
   painter.setPen(bg.darker(110));
 
@@ -228,7 +380,15 @@ QSize
 CQDirBarItem::
 sizeHint() const
 {
-  return minimumSizeHint();
+  QFontMetrics fm(font());
+
+  auto border     = this->border();
+  auto arrowWidth = this->arrowWidth();
+
+  int w = fm.horizontalAdvance(text()) + 2*border + arrowWidth;
+  int h = fm.height() + 2*border;
+
+  return QSize(w, h);
 }
 
 QSize
@@ -237,8 +397,9 @@ minimumSizeHint() const
 {
   QFontMetrics fm(font());
 
-  int w = fm.horizontalAdvance(text_) + 2*border_ + arrowWidth_;
-  int h = fm.height() + 4;
+  auto border = this->border();
 
-  return QSize(w, h);
+  int h = fm.height() + 2*border;
+
+  return QSize(1, h);
 }
