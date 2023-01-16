@@ -19,7 +19,7 @@ class CQFileMgrDetails : public QTreeWidget {
   void addRow(CFileMgrFile *file, const std::vector<std::string> &values);
 
  private:
-  void contextMenuEvent(QContextMenuEvent *event);
+  void contextMenuEvent(QContextMenuEvent *event) override;
 
  private slots:
   void selectionChanged();

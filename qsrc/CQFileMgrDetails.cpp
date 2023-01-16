@@ -17,7 +17,7 @@ class CQFileMgrDetailsRow : public QTreeWidgetItem {
     return file_;
   }
 
-  bool operator<(const QTreeWidgetItem &other) const {
+  bool operator<(const QTreeWidgetItem &other) const override {
     int col = details_->sortColumn();
 
     std::string s1 =       text(col).toStdString();

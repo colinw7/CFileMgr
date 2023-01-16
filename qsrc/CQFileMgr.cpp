@@ -30,27 +30,27 @@ class CFileMgrImpl : public CFileMgr {
    CFileMgr(), filemgr_(filemgr) {
   }
 
-  virtual void redraw() {
+  void redraw() override {
     filemgr_->changed();
   }
 
-  virtual void changeDir(const std::string &dirname) {
+  void changeDir(const std::string &dirname) override {
     filemgr_->changeDir(dirname);
   }
 
-  virtual void setTableColumns(const CFileMgrDetails::ColumnList &columns) {
+  void setTableColumns(const CFileMgrDetails::ColumnList &columns) override {
     filemgr_->setTableColumns(columns);
   }
 
-  virtual void deleteAllTableRows() {
+  void deleteAllTableRows() override {
     filemgr_->deleteAllTableRows();
   }
 
-  virtual void addTableRow(CFileMgrFile *file, const std::vector<std::string> &values) {
+  void addTableRow(CFileMgrFile *file, const std::vector<std::string> &values) override {
     filemgr_->addTableRow(file, values);
   }
 
-  virtual void activateFileType(const std::string &filename, CFileType type) {
+  void activateFileType(const std::string &filename, CFileType type) override {
     if (! filemgr_->activateFileTypeFwd(filename, type))
       CFileMgr::activateFileType(filename, type);
   }

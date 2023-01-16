@@ -27,9 +27,9 @@ class CQDirPlaces : public QListWidget {
  private:
   void update();
 
-  void mouseDoubleClickEvent(QMouseEvent *event);
+  void mouseDoubleClickEvent(QMouseEvent *event) override;
 
-  void contextMenuEvent(QContextMenuEvent *event);
+  void contextMenuEvent(QContextMenuEvent *event) override;
 
  private slots:
   void placeSlot(QListWidgetItem *);
@@ -39,8 +39,8 @@ class CQDirPlaces : public QListWidget {
   void menuDeleteSlot();
 
  private:
-  typedef std::list<CDirView::Place>        PlaceList;
-  typedef std::map<std::string,std::string> PlaceMap;
+  using PlaceList = std::list<CDirView::Place>;
+  using PlaceMap  = std::map<std::string,std::string>;
 
   PlaceList        places_;
   PlaceMap         place_map_;

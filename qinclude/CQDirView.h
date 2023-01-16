@@ -11,7 +11,7 @@ class CQDirViewFactory : public CDirViewFactory {
  public:
   static void init();
 
-  CDirView *createView(const std::string &dirname);
+  CDirView *createView(const std::string &dirname) override;
 };
 
 class CQDirView : public QObject, public CDirView {
@@ -28,13 +28,13 @@ class CQDirView : public QObject, public CDirView {
 
   CQDirView(const std::string &dirname);
 
-  bool setDirName1(const std::string &dirname);
+  bool setDirName1(const std::string &dirname) override;
 
-  void selectionChanged();
+  void selectionChanged() override;
 
-  void fileActivated(const std::string &filename);
+  void fileActivated(const std::string &filename) override;
 
-  void contentsChanged();
+  void contentsChanged() override;
 
  signals:
   void dirChangedSignal(const QString &dirname);
