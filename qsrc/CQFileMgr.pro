@@ -34,8 +34,8 @@ HEADERS += \
 ../qinclude/CQDirBar.h \
 ../qinclude/CQDirPlaces.h \
 ../qinclude/CQDirView.h \
+../qinclude/CQFileMgrDetails.h \
 \
-CQFileMgrDetails.h \
 CQFileMgrFilmstripIcons.h \
 CQFileMgrFilmstripImage.h \
 CQFileMgrIcons.h \

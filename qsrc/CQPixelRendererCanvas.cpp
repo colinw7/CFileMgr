@@ -1,6 +1,8 @@
 #include <CQPixelRendererCanvas.h>
 #include <CQWidgetPixelRenderer.h>
 #include <CQUtil.h>
+#include <CQUtilEvent.h>
+#include <CImageLib.h>
 
 #include <QWidget>
 #include <QMouseEvent>
@@ -250,7 +252,7 @@ void
 CQPixelRendererCanvas::
 wheelEvent(QWheelEvent *event)
 {
-  scroll(-event->delta()/120);
+  scroll(-event->angleDelta().y()/120);
 }
 
 void
@@ -298,7 +300,7 @@ CQPixelRendererCanvas::
 updateRubberband()
 {
   if (selection_.isSet() && selection_.getMaxDim() > 2) {
-    if (rubber_band_ == 0)
+    if (rubber_band_ == nullptr)
       rubber_band_ = new QRubberBand(QRubberBand::Rectangle, this);
 
     int x = selection_.getXMin (); int y = selection_.getYMin  ();
@@ -313,7 +315,7 @@ updateRubberband()
     rubber_band_->show();
   }
   else {
-    if (rubber_band_ != 0)
+    if (rubber_band_ != nullptr)
       rubber_band_->hide();
   }
 }

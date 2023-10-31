@@ -10,7 +10,7 @@
 
 CQDirPlaces::
 CQDirPlaces(QWidget *parent) :
- QListWidget(parent), edit_(0)
+ QListWidget(parent), edit_(nullptr)
 {
   setObjectName("dirPlaces");
 
@@ -111,7 +111,7 @@ void
 CQDirPlaces::
 mouseDoubleClickEvent(QMouseEvent *event)
 {
-  if (edit_ == 0) {
+  if (edit_ == nullptr) {
     edit_ = new CQFloatEdit(this);
 
     connect(edit_, SIGNAL(valueChanged(const QString &)),
@@ -158,7 +158,7 @@ itemEditFinished(const QString &text)
 
   places_.push_back(new_place);
 
-  edit_item_ = 0;
+  edit_item_ = nullptr;
 
   update();
 }
@@ -201,7 +201,7 @@ menuDeleteSlot()
 
   delete menu_item_;
 
-  menu_item_ = 0;
+  menu_item_ = nullptr;
 
   update();
 }

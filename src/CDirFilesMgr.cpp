@@ -6,7 +6,7 @@ struct CDirProcessGetFilesProc : public CDirProcessProc {
 
   CDirProcessGetFilesProc(CDirFiles *dir_files1) : dir_files(dir_files1) { }
 
-  void process() { dir_files->addDirFilename(filename); }
+  void process() override { dir_files->addDirFilename(filename); }
 };
 
 CDirFilesMgr::
@@ -35,7 +35,7 @@ bool
 CDirFilesMgr::
 getSortedFiles(CDirFiles **dir_files)
 {
-  *dir_files = 0;
+  *dir_files = nullptr;
 
   return getSortedFilesI(dir_files);
 }
@@ -66,7 +66,7 @@ bool
 CDirFilesMgr::
 getFiles(CDirFiles **dir_files)
 {
-  *dir_files = 0;
+  *dir_files = nullptr;
 
   return getFilesI(dir_files);
 }

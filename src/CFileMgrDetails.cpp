@@ -127,7 +127,7 @@ void
 CFileMgrDetails::
 activate(CFileMgrFile *file)
 {
-  if (file == 0)
+  if (file == nullptr)
     return;
 
   if (file->isDirectory())
@@ -153,7 +153,7 @@ rowToFile(int row)
     if ((*p1)->getRow() == row)
       return *p1;
 
-  return 0;
+  return nullptr;
 }
 
 void

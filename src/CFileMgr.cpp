@@ -514,7 +514,7 @@ select(int x, int y)
 {
   CFileMgrFile *file = xyToFile(x, y);
 
-  if (file != 0)
+  if (file != nullptr)
     file->setSelected(true);
 
   redraw();
@@ -596,7 +596,7 @@ activate(int x, int y)
 {
   CFileMgrFile *file = xyToFile(x, y);
 
-  if (file != 0)
+  if (file != nullptr)
     activate(file);
 }
 
@@ -815,7 +815,7 @@ xyToFile(int x, int y) const
     if ((*p1)->inside(x, y))
       return *p1;
 
-  return 0;
+  return nullptr;
 }
 
 CImagePtr

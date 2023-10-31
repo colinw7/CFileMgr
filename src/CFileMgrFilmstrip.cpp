@@ -50,7 +50,7 @@ updateFont()
 {
   auto font = CFontMgrInst->lookupFont("helvetica", CFONT_STYLE_NORMAL, file_mgr_->getFontSize());
 
-  if (icons_renderer_ != 0)
+  if (icons_renderer_ != nullptr)
     icons_renderer_->setFont(font);
 }
 
@@ -92,12 +92,12 @@ drawImage()
   // Draw Current Image
   CFileMgrDir::FileList selected = file_mgr_->getSelected();
 
-  CFileMgrFile *file = 0;
+  CFileMgrFile *file = nullptr;
 
   if (! selected.empty())
     file = *selected.begin();
 
-  if (file != 0 && height > 0) {
+  if (file != nullptr && height > 0) {
     CImagePtr image = file->getImage(width, height);
 
     if (image.isValid()) {

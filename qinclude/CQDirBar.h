@@ -44,7 +44,7 @@ class CQDirBarItem : public QWidget {
   void paintEvent(QPaintEvent *event) override;
 
  private:
-  CQDirBar *bar_        { 0 };
+  CQDirBar *bar_        { nullptr };
   QString   text_;
   QString   dir_;
   bool      first_      { false };
@@ -63,7 +63,7 @@ class CQDirBar : public QWidget {
   Q_PROPERTY(int border     READ border     WRITE setBorder    )
 
  public:
-  CQDirBar(QWidget *parent=0);
+  CQDirBar(QWidget *parent=nullptr);
  ~CQDirBar();
 
   int border() const { return border_; }
@@ -91,7 +91,7 @@ class CQDirBar : public QWidget {
  private:
   typedef std::vector<CQDirBarItem *> WidgetList;
 
-//QHBoxLayout *layout_       { 0 };
+//QHBoxLayout *layout_       { nullptr };
   WidgetList   widgets_;
   uint         num_widgets_  { 0 };
   int          border_       { 4 };

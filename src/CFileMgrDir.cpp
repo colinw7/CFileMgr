@@ -103,7 +103,7 @@ getCurrentFile()
 
   current_num_ = num;
 
-  return 0;
+  return nullptr;
 }
 
 void

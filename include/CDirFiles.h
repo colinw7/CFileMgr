@@ -17,7 +17,7 @@ class CDirFiles {
  public:
   typedef std::vector<CFile *>::iterator iterator;
 
-  explicit CDirFiles(CDir *dir=0);
+  explicit CDirFiles(CDir *dir=nullptr);
 
   CDirFiles(const char *dirname);
 
