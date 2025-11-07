@@ -2,6 +2,8 @@
 #define CIMAGE_THUMBNAIL_H
 
 #include <CImagePtr.h>
+#include <string>
+#include <sys/types.h>
 
 #define CThumbnailMgrInst CThumbnailMgr::getInstance()
 

@@ -191,26 +191,26 @@ getLargeImage(CFileType type)
 
     image = CImageMgrInst->createImage(src);
 
-    if (! image.isValid())
+    if (! image)
       std::cerr << "Failed to read " << filename << std::endl;
   }
   else
     std::cerr << "No file for large/" << type_str << std::endl;
 
-  if (! image.isValid()) {
+  if (! image) {
     if (config_.getValue("large/default", filename)) {
       CImageFileSrc src(filename);
 
       image = CImageMgrInst->createImage(src);
 
-      if (! image.isValid())
+      if (! image)
         std::cerr << "Failed to read " << filename << std::endl;
     }
     else
       std::cerr << "No file for large/default" << std::endl;
   }
 
-  if (image.isValid()) {
+  if (image) {
     if (getIconWidth () != int(image->getWidth ()) ||
         getIconHeight() != int(image->getHeight()))
       image = image->resizeKeepAspect(getIconSize());
@@ -243,26 +243,26 @@ getSmallImage(CFileType type)
 
     image = CImageMgrInst->createImage(src);
 
-    if (! image.isValid())
+    if (! image)
       std::cerr << "Failed to read " << filename << std::endl;
   }
   else
     std::cerr << "No file for small/" << type_str << std::endl;
 
-  if (! image.isValid()) {
+  if (! image) {
     if (config_.getValue("small/default", filename)) {
       CImageFileSrc src(filename);
 
       image = CImageMgrInst->createImage(src);
 
-      if (! image.isValid())
+      if (! image)
         std::cerr << "Failed to read " << filename << std::endl;
     }
     else
       std::cerr << "No file for small/default" << std::endl;
   }
 
-  if (image.isValid()) {
+  if (image) {
     if (getIconWidth () != int(image->getWidth ()) ||
         getIconHeight() != int(image->getHeight()))
       image = image->resizeKeepAspect(getIconSize());

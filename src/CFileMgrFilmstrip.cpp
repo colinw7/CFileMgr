@@ -100,7 +100,7 @@ drawImage()
   if (file != nullptr && height > 0) {
     CImagePtr image = file->getImage(width, height);
 
-    if (image.isValid()) {
+    if (image) {
       int x = (width  - int(image->getWidth ()))/2;
       int y = (height - int(image->getHeight()))/2;
 

@@ -869,9 +869,7 @@ drawDir(CPixelRenderer *renderer, int x, int y, CFileMgrFile *file)
     return;
 
   CImagePtr image = getImage(CFILE_TYPE_INODE_DIR);
-
-  if (! image.isValid())
-    return;
+  if (! image) return;
 
   drawFileImage(renderer, x, y, image);
 

@@ -96,7 +96,7 @@ getImage(const std::string &filename, uint width, uint height)
 
   CImagePtr image = CImageMgrInst->createImage(src);
 
-  if (! image.isValid()) {
+  if (! image) {
     std::cerr << "Invalid image file " << filename << "\n";
     return CImagePtr();
   }

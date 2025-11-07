@@ -55,18 +55,18 @@ getImage(int width, int height)
   if (! file_.isRegular())
     return CImagePtr();
 
-  if (! image_.isValid()) {
+  if (! image_) {
     CImageFileSrc src(file_);
 
     image_ = CImageMgrInst->createImage(src);
 
     if (dir_->getFileMgr()->getForceRGB()) {
-      if (image_.isValid() && image_->hasColormap())
+      if (image_ && image_->hasColormap())
         image_->convertToRGB();
     }
   }
 
-  if (! image_.isValid())
+  if (! image_)
     return CImagePtr();
 
   if (width  != image_size_.width || height != image_size_.height) {
